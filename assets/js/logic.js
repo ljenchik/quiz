@@ -1,4 +1,6 @@
 let timerEl = document.querySelector("#time");
+let scoreEl = document.querySelector("#score");
+
 let startButton = document.querySelector("#start");
 let questionTitle = document.querySelector("#question-title");
 let choices = document.querySelector("#choices");
@@ -9,9 +11,8 @@ let nextButton = document.createElement("button");
 nextButton.textContent = "Next";
 questionSection.appendChild(nextButton); 
 
-let secondsLeft = 75;
+let secondsLeft = 10;
 let score = 0;
-let clicked = false;
 
 function renderQuestionTitle(currentQuestion) {
   questionTitle.innerHTML = "";
@@ -37,7 +38,7 @@ function renderAnswers(currentQuestion) {
       ) {
         message.textContent = "Correct!";
         score++;
-        console.log(score);
+        scoreEl.textContent = score.toString();
       } else {
         message.textContent = "Wrong!";
         secondsLeft -= 10;
@@ -51,14 +52,15 @@ function renderQuestion(currentQuestion) {
   document.querySelector("#questions").classList.remove("hide");
   renderQuestionTitle(currentQuestion);
   renderAnswers(currentQuestion);
+  
   nextButton.addEventListener('click', function(event) {
     event.preventDefault();
-    if (currentQuestion + 1 < questions.length) {
-      renderQuestion(currentQuestion + 1);
-    }
-    else {
+    if (secondsLeft <= 0 || currentQuestion + 1 >= questions.length) {
       document.querySelector("#questions").classList.add("hide");
       document.querySelector("#end-screen").classList.remove("hide");
+    }
+    else {
+      renderQuestion(currentQuestion + 1);
     }
   });
 }
@@ -70,13 +72,13 @@ startButton.addEventListener("click", function (event) {
   var timerInterval = setInterval(function () {
     secondsLeft--;
     timerEl.textContent = secondsLeft;
-    if (secondsLeft === 0) {
+    if (secondsLeft <= 0) {
       clearInterval(timerInterval);
+      timerEl.textContent = 0;
     }
   }, 1000);
 });
 
-//renderQuestion(0);
 
 
 
