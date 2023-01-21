@@ -1,11 +1,14 @@
 let timerEl = document.querySelector("#time");
 let scoreEl = document.querySelector("#score");
-
+let finalScore = document.querySelector("#final-score");
 let startButton = document.querySelector("#start");
 let questionTitle = document.querySelector("#question-title");
 let choices = document.querySelector("#choices");
 let questionSection = document.querySelector("#questions");
 let endOfQuizMessage = document.querySelector("#end-screen");
+let submitButton = document.querySelector("#submit");
+let initialsInput = document.querySelector("#initials");
+let scores = {};
 
 let nextButton = document.createElement("button");
 nextButton.textContent = "Next";
@@ -58,6 +61,7 @@ function renderQuestion(currentQuestion) {
     if (secondsLeft <= 0 || currentQuestion + 1 >= questions.length) {
       document.querySelector("#questions").classList.add("hide");
       document.querySelector("#end-screen").classList.remove("hide");
+      finalScore.textContent = score;
     }
     else {
       renderQuestion(currentQuestion + 1);
@@ -80,6 +84,15 @@ startButton.addEventListener("click", function (event) {
 });
 
 
+submitButton.addEventListener("click", function (event) {
+  event.preventDefault();
 
+  var player = {
+    initials: initialsInput.value.trim(),
+    score: 0
+  };
+  player.score = score;
+  localStorage.setItem("player", JSON.stringify(player));
+});
 
 
