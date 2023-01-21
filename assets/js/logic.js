@@ -18,6 +18,15 @@ let submitButton = document.querySelector("#submit");
 let submitMessage = document.createElement("h4");
 let feedback = document.querySelector("#feedback");
 
+let highscores = [];
+
+function init() {
+  let storedHighscores = JSON.parse(localStorage.getItem("highscores"));
+  if (storedHighscores !== null) {
+    highscores = storedHighscores;
+  }
+}
+
 let score = 0;
 let secondsLeft = 10;
 
@@ -82,6 +91,7 @@ function renderQuestion(currentQuestion) {
 
 startButton.addEventListener("click", function (event) {
   event.preventDefault();
+  init();
   score = 0;
   secondsLeft = 10;
   renderQuestion(0);
@@ -108,14 +118,15 @@ submitButton.addEventListener("click", function (event) {
   if (!player.initials) {
     endOfQuizMessage.textContent = "Enter your initials";
   } else {
-    openInNewTab('highscores.html')
+    window.open('highscores.html', "_self");
   }
   
   player.score = score;
-  localStorage.setItem("player", JSON.stringify(player));
+  highscores.push(player);
+
+  localStorage.setItem("highscores", JSON.stringify(highscores));
 });
 
-function openInNewTab(url) {
-  const win = window.open(url, '_blank');
-  win.focus();
-}
+
+
+
