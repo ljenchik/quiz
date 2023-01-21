@@ -18,8 +18,8 @@ let submitButton = document.querySelector("#submit");
 let submitMessage = document.createElement("h4");
 let feedback = document.querySelector("#feedback");
 
-let secondsLeft = 10;
 let score = 0;
+let secondsLeft = 10;
 
 function renderQuestionTitle(currentQuestion) {
   questionTitle.innerHTML = "";
@@ -55,7 +55,7 @@ function renderAnswers(currentQuestion) {
       }
     });
   }
-  feedback.classList.add("hide");
+  feedback.innerHTML = "";
 }
 
 function renderQuestion(currentQuestion) {
@@ -82,7 +82,8 @@ function renderQuestion(currentQuestion) {
 
 startButton.addEventListener("click", function (event) {
   event.preventDefault();
-  scoreEl.textContent = 0;
+  score = 0;
+  secondsLeft = 10;
   renderQuestion(0);
   // Sets interval in variable
   var timerInterval = setInterval(function () {
@@ -102,16 +103,19 @@ submitButton.addEventListener("click", function (event) {
     initials: initialsInput.value.trim(),
     score: 0,
   };
-
-  feedback.classList.remove("hide");
   feedback.innerHTML = "";
 
   if (!player.initials) {
     endOfQuizMessage.textContent = "Enter your initials";
   } else {
-    endOfQuizMessage.textContent = "Thank you, your score is saved";
+    openInNewTab('highscores.html')
   }
-  feedback.appendChild(endOfQuizMessage);
+  
   player.score = score;
   localStorage.setItem("player", JSON.stringify(player));
 });
+
+function openInNewTab(url) {
+  const win = window.open(url, '_blank');
+  win.focus();
+}
