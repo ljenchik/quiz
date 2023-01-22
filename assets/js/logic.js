@@ -18,6 +18,7 @@ let submitButton = document.querySelector("#submit");
 let submitMessage = document.createElement("h4");
 let feedback = document.querySelector("#feedback");
 
+
 let highscores = [];
 
 function init() {
@@ -118,15 +119,15 @@ submitButton.addEventListener("click", function (event) {
   if (!player.initials) {
     endOfQuizMessage.textContent = "Enter your initials";
   } else {
-    window.open('highscores.html', "_self");
+    window.location.href = 'highscores.html';
+    displayScores();
   }
   
   player.score = score;
   highscores.push(player);
-
   localStorage.setItem("highscores", JSON.stringify(highscores));
+  
 });
-
 
 
 
