@@ -18,15 +18,27 @@ let submitButton = document.querySelector("#submit");
 let submitMessage = document.createElement("h4");
 let feedback = document.querySelector("#feedback");
 
+let regexInitials = /[a-zA-Z]/g;
+
 let highscores = [];
 let score = 0;
 let timer;
 let secondsLeft;
+let randomQuestions = [];
+ 
 
+// Choose 5  differentrandom questions from the questions array
+while (randomQuestions.length < 5) {
+  let randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+  if (randomQuestions.includes(randomQuestion) === false) {
+    randomQuestions.push(randomQuestion);
+  }
+}
+  
 startButton.addEventListener("click", startQuiz);
 
 function startQuiz() {
-  secondsLeft = 20;
+  secondsLeft = 75;
   startButton.disabled = true;
   startTimer();
   init();
@@ -58,10 +70,10 @@ function init() {
 function renderAnswers(currentQuestion) {
   choices.innerHTML = "";
 
-  for (let j = 0; j < questions[currentQuestion][1].length; j++) {
+  for (let j = 0; j < randomQuestions[currentQuestion][1].length; j++) {
     let answerEl = document.createElement("button");
     answerEl.setAttribute("data-index", j);
-    answerEl.textContent = questions[currentQuestion][1][j];
+    answerEl.textContent = randomQuestions[currentQuestion][1][j];
     choices.appendChild(answerEl);
 
     answerEl.addEventListener("click", function (event) {
@@ -70,12 +82,14 @@ function renderAnswers(currentQuestion) {
       let message = document.createElement("h4");
       if (
         parseInt(answerEl.getAttribute("data-index")) ===
-        questions[currentQuestion][2]
+        randomQuestions[currentQuestion][2]
       ) {
+       
         message.textContent = "Correct!";
         score++;
         scoreEl.textContent = score.toString();
       } else {
+       
         message.textContent = "Wrong!";
         secondsLeft -= 10;
       }
@@ -85,9 +99,11 @@ function renderAnswers(currentQuestion) {
       //feedback.appendChild(message);
       feedback.innerHTML = message.textContent;
 
+      // Delay to see a question feedback before moving to the next question
       setTimeout(function () {
         feedback.innerHTML = "";
-      }, 1000);
+        feedback.classList.add("hide");
+      }, 1200);
 
       renderQuestion(currentQuestion + 1);
     });
@@ -95,10 +111,11 @@ function renderAnswers(currentQuestion) {
 }
 
 function renderQuestion(currentQuestion) {
-  if (currentQuestion < questions.length && secondsLeft > 0) {
+  // Render question title
+  if (currentQuestion < randomQuestions.length && secondsLeft > 0) {
     questionTitle.innerHTML = "";
     questionTitle.textContent = `${currentQuestion + 1}. ${
-      questions[currentQuestion][0]
+      randomQuestions[currentQuestion][0]
     }`;
 
     renderAnswers(currentQuestion);
@@ -115,17 +132,20 @@ function renderQuestion(currentQuestion) {
 initialsInput.addEventListener("click", function (event) {
   event.preventDefault();
   feedback.classList.add("hide");
+  initialsInput.value = "";
 });
 
 submitButton.addEventListener("click", function (event) {
   event.preventDefault();
+
+
   let player = {
     initials: initialsInput.value.trim().toUpperCase(),
   };
 
-  if (!player.initials) {
+  if (!player.initials || player.initials.length !== 2 || !player.initials.match(regexInitials)) {
     feedback.classList.remove("hide");
-    feedback.textContent = "Please enter your initials";
+    feedback.textContent = "Please enter your initials (two letters)";
   } else {
     player.score = score;
     highscores.push(player);
@@ -133,3 +153,6 @@ submitButton.addEventListener("click", function (event) {
     window.location.href = "highscores.html";
   }
 });
+
+
+
