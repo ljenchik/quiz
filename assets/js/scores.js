@@ -1,5 +1,6 @@
 // List of scores
 let listOfScores = document.querySelector("#highscores");
+
 // Button to clear scores
 let clearButton = document.querySelector("#clear");
 
@@ -7,7 +8,6 @@ function displayScores() {
   let highscoresStored = JSON.parse(localStorage.getItem("highscores"));
   if (highscoresStored !== null) {
     sortArray(highscoresStored);
-
     for (let i = 0; i < highscoresStored.length; i++) {
       let scoreEl = document.createElement("li");
       scoreEl.textContent =

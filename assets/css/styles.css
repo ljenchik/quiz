@@ -48,7 +48,7 @@ ol {
 li {
   padding: 5px;
   list-style: decimal inside none;
-  margin-left: 10px;
+  margin-left: 5px;
 }
 
 li:nth-child(odd) {
