@@ -81,35 +81,41 @@ function renderAnswers(currentQuestion) {
       }
 
       feedback.classList.remove("hide");
-      feedback.appendChild(message);
+
+      //feedback.appendChild(message);
+      feedback.innerHTML = message.textContent;
+
+      setTimeout(function () {
+        feedback.innerHTML = "";
+      }, 1000);
+
       renderQuestion(currentQuestion + 1);
     });
   }
 }
 
 function renderQuestion(currentQuestion) {
-  
   if (currentQuestion < questions.length && secondsLeft > 0) {
     questionTitle.innerHTML = "";
     questionTitle.textContent = `${currentQuestion + 1}. ${
       questions[currentQuestion][0]
     }`;
+
     renderAnswers(currentQuestion);
+  } else {
+    questionSection.classList.add("hide");
+    feedback.classList.remove("hide");
+    endOfQuizMessage.classList.remove("hide");
+    secondsLeft = 0;
+    finalScore.textContent = score;
   }
-  else {
-      questionSection.classList.add("hide");
-      feedback.classList.remove("hide");
-      endOfQuizMessage.classList.remove("hide");
-      secondsLeft = 0;
-      finalScore.textContent = score;
-    }
 }
 
 // Delete feedback from the last question
-initialsInput.addEventListener("click", function(event) {
+initialsInput.addEventListener("click", function (event) {
   event.preventDefault();
   feedback.classList.add("hide");
-})
+});
 
 submitButton.addEventListener("click", function (event) {
   event.preventDefault();
