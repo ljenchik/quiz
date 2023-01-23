@@ -10,11 +10,6 @@ let questionTitle = document.querySelector("#question-title");
 let choices = document.querySelector("#choices");
 let questionSection = document.querySelector("#questions");
 
-// Next button
-// let nextButton = document.createElement("button");
-// nextButton.textContent = "Next";
-// questionSection.appendChild(nextButton);
-
 // End of quiz
 let endOfQuizMessage = document.querySelector("#end-screen");
 let finalScore = document.querySelector("#final-score");
@@ -87,13 +82,13 @@ function renderAnswers(currentQuestion) {
 
       feedback.classList.remove("hide");
       feedback.appendChild(message);
-
       renderQuestion(currentQuestion + 1);
     });
   }
 }
 
 function renderQuestion(currentQuestion) {
+  
   if (currentQuestion < questions.length && secondsLeft > 0) {
     questionTitle.innerHTML = "";
     questionTitle.textContent = `${currentQuestion + 1}. ${
@@ -110,19 +105,21 @@ function renderQuestion(currentQuestion) {
     }
 }
 
-submitButton.addEventListener("click", function (event) {
+// Delete feedback from the last question
+initialsInput.addEventListener("click", function(event) {
   event.preventDefault();
   feedback.classList.add("hide");
+})
 
-  var player = {
+submitButton.addEventListener("click", function (event) {
+  event.preventDefault();
+  let player = {
     initials: initialsInput.value.trim().toUpperCase(),
   };
 
-  feedback.innerHTML = "";
-
   if (!player.initials) {
     feedback.classList.remove("hide");
-    feedback.textContent = "Enter your initials, please";
+    feedback.textContent = "Please enter your initials";
   } else {
     player.score = score;
     highscores.push(player);
