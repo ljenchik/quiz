@@ -25,7 +25,6 @@ let score = 0;
 let timer;
 let secondsLeft;
 let randomQuestions = [];
- 
 
 // Choose 5  differentrandom questions from the questions array
 while (randomQuestions.length < 5) {
@@ -34,7 +33,7 @@ while (randomQuestions.length < 5) {
     randomQuestions.push(randomQuestion);
   }
 }
-  
+
 startButton.addEventListener("click", startQuiz);
 
 function startQuiz() {
@@ -42,6 +41,7 @@ function startQuiz() {
   startButton.disabled = true;
   startTimer();
   init();
+  
 }
 
 function startTimer() {
@@ -50,7 +50,7 @@ function startTimer() {
     timerEl.textContent = secondsLeft;
     if (secondsLeft <= 0) {
       clearInterval(timer);
-      timerEl.textContent = 0;
+      endOfQuiz();
     }
   }, 1000);
 }
@@ -84,12 +84,10 @@ function renderAnswers(currentQuestion) {
         parseInt(answerEl.getAttribute("data-index")) ===
         randomQuestions[currentQuestion][2]
       ) {
-       
         message.textContent = "Correct!";
         score++;
         scoreEl.textContent = score.toString();
       } else {
-       
         message.textContent = "Wrong!";
         secondsLeft -= 10;
       }
@@ -112,19 +110,15 @@ function renderAnswers(currentQuestion) {
 
 function renderQuestion(currentQuestion) {
   // Render question title
-  if (currentQuestion < randomQuestions.length && secondsLeft > 0) {
+  if (currentQuestion < randomQuestions.length) {
     questionTitle.innerHTML = "";
     questionTitle.textContent = `${currentQuestion + 1}. ${
       randomQuestions[currentQuestion][0]
     }`;
-
     renderAnswers(currentQuestion);
-  } else {
-    questionSection.classList.add("hide");
-    feedback.classList.remove("hide");
-    endOfQuizMessage.classList.remove("hide");
-    secondsLeft = 0;
-    finalScore.textContent = score;
+  } 
+  else {
+    endOfQuiz();
   }
 }
 
@@ -138,12 +132,15 @@ initialsInput.addEventListener("click", function (event) {
 submitButton.addEventListener("click", function (event) {
   event.preventDefault();
 
-
   let player = {
     initials: initialsInput.value.trim().toUpperCase(),
   };
 
-  if (!player.initials || player.initials.length !== 2 || !player.initials.match(regexInitials)) {
+  if (
+    !player.initials ||
+    player.initials.length !== 2 ||
+    !player.initials.match(regexInitials)
+  ) {
     feedback.classList.remove("hide");
     feedback.textContent = "Please enter your initials (two letters)";
   } else {
@@ -154,5 +151,10 @@ submitButton.addEventListener("click", function (event) {
   }
 });
 
-
-
+function endOfQuiz() {
+  questionSection.classList.add("hide");
+  feedback.classList.remove("hide");
+  endOfQuizMessage.classList.remove("hide");
+  timerEl.textContent = 0;
+  finalScore.textContent = score;
+}
