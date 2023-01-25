@@ -51,6 +51,8 @@ function startTimer() {
     if (secondsLeft <= 0) {
       clearInterval(timer);
       endOfQuiz();
+      timerEl.textContent = 0;
+      feedback.classList.add('hide');
     }
   }, 1000);
 }
@@ -155,6 +157,6 @@ function endOfQuiz() {
   questionSection.classList.add("hide");
   feedback.classList.remove("hide");
   endOfQuizMessage.classList.remove("hide");
-  timerEl.textContent = 0;
+  secondsLeft = 0;
   finalScore.textContent = score;
 }
